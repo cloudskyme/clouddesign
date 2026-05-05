@@ -58,6 +58,8 @@ export const zhCN: Dict = {
   'settings.modeDaemonInstalledMeta': '已安装 {count} 个',
   'settings.modeApi': 'Anthropic API',
   'settings.modeApiMeta': '自带 Key',
+  'settings.modeAliyun': '阿里云 API',
+  'settings.modeAliyunMeta': '通义千问',
   'settings.codeAgent': '代码代理',
   'settings.codeAgentHint': '通过扫描 PATH 自动检测，选择你希望使用的 CLI。',
   'settings.rescan': '↻ 重新扫描',

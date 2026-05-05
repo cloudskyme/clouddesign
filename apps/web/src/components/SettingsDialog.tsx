@@ -113,7 +113,9 @@ export function SettingsDialog({
   const canSave =
     cfg.mode === 'daemon'
       ? Boolean(cfg.agentId && agents.find((a) => a.id === cfg.agentId)?.available)
-      : Boolean(cfg.apiKey.trim() && cfg.model.trim() && cfg.baseUrl.trim());
+      : cfg.mode === 'aliyun'
+        ? Boolean(cfg.apiKey.trim() && cfg.model.trim() && cfg.baseUrl.trim())
+        : Boolean(cfg.apiKey.trim() && cfg.model.trim() && cfg.baseUrl.trim());
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -234,6 +236,16 @@ export function SettingsDialog({
                 >
                   <span className="seg-title">{t('settings.modeApi')}</span>
                   <span className="seg-meta">{t('settings.modeApiMeta')}</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={cfg.mode === 'aliyun'}
+                  className={'seg-btn' + (cfg.mode === 'aliyun' ? ' active' : '')}
+                  onClick={() => setMode('aliyun')}
+                >
+                  <span className="seg-title">{t('settings.modeAliyun')}</span>
+                  <span className="seg-meta">{t('settings.modeAliyunMeta')}</span>
                 </button>
               </div>
           {cfg.mode === 'daemon' ? (
@@ -407,6 +419,96 @@ export function SettingsDialog({
                   </div>
                 );
               })()}
+            </section>
+          ) : cfg.mode === 'aliyun' ? (
+            <section className="settings-section">
+              <div className="section-head">
+                <h3>{t('settings.apiSection')}</h3>
+              </div>
+              <label className="field">
+                <span className="field-label">{t('settings.apiKey')}</span>
+                <div className="field-row">
+                  <input
+                    type={showApiKey ? 'text' : 'password'}
+                    placeholder="sk-aliyun-..."
+                    value={cfg.apiKey}
+                    onChange={(e) => setCfg({ ...cfg, apiKey: e.target.value })}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    className="ghost icon-btn"
+                    onClick={() => setShowApiKey((v) => !v)}
+                    title={
+                      showApiKey ? t('settings.hideKey') : t('settings.showKey')
+                    }
+                  >
+                    {showApiKey ? t('settings.hide') : t('settings.show')}
+                  </button>
+                </div>
+              </label>
+              <label className="field">
+                <span className="field-label">{t('settings.model')}</span>
+                <input
+                  type="text"
+                  value={cfg.model}
+                  list="suggested-models"
+                  onChange={(e) => setCfg({ ...cfg, model: e.target.value })}
+                />
+                <datalist id="suggested-models">
+                  {SUGGESTED_MODELS.concat(['qwen-max', 'qwen-plus', 'qwen-turbo', 'qwen-vl-plus', 'qwen-audio-plus']).map((m) => (
+                    <option value={m} key={m} />
+                  ))}
+                </datalist>
+              </label>
+              <label className="field">
+                <span className="field-label">{t('settings.baseUrl')}</span>
+                <input
+                  type="text"
+                  value={cfg.baseUrl}
+                  onChange={(e) => setCfg({ ...cfg, baseUrl: e.target.value })}
+                />
+              </label>
+              <label className="field">
+                <span className="field-label">Quick fill provider</span>
+                <select
+                  value=""
+                  onChange={(e) => {
+                    const idx = Number(e.target.value);
+                    if (!isNaN(idx) && KNOWN_PROVIDERS[idx]) {
+                      const p = KNOWN_PROVIDERS[idx]!;
+                      setCfg((c) => ({ ...c, baseUrl: p.baseUrl, model: p.model }));
+                    }
+                  }}
+                >
+                  <option value="">— choose a provider —</option>
+                  {KNOWN_PROVIDERS.map((p, i) => (
+                    <option key={i} value={i}>{p.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="field">
+                <span className="field-label">{t('settings.maxTokens')}</span>
+                <input
+                  type="number"
+                  min={MIN_MAX_TOKENS}
+                  max={MAX_MAX_TOKENS}
+                  step={MIN_MAX_TOKENS}
+                  placeholder={String(modelMaxTokensDefault(cfg.model))}
+                  value={cfg.maxTokens ?? ''}
+                  onChange={(e) => {
+                    const raw = e.target.value.trim();
+                    if (raw === '') {
+                      setCfg({ ...cfg, maxTokens: undefined });
+                      return;
+                    }
+                    const val = parseInt(raw, 10);
+                    setCfg({ ...cfg, maxTokens: Number.isFinite(val) ? val : undefined });
+                  }}
+                />
+                <p className="hint">{t('settings.maxTokensHint')}</p>
+              </label>
+              <p className="hint">{t('settings.apiHint')}</p>
             </section>
           ) : (
             <section className="settings-section">

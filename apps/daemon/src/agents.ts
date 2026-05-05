@@ -530,6 +530,30 @@ export const AGENT_DEFS = [
     buildArgs: () => ['acp'],
     streamFormat: 'acp-json-rpc',
   },
+  {
+    id: 'aliyun',
+    name: '阿里云 API',
+    bin: 'aliyun',
+    // 阿里云 API 使用标准 OpenAI 兼容接口
+    fallbackModels: [
+      { id: 'default', label: 'Default (API config)' },
+      { id: 'qwen-max', label: 'Qwen-Max' },
+      { id: 'qwen-plus', label: 'Qwen-Plus' },
+      { id: 'qwen-turbo', label: 'Qwen-Turbo' },
+      { id: 'qwen-vl-plus', label: 'Qwen-VL-Plus' },
+      { id: 'qwen-audio-plus', label: 'Qwen-Audio-Plus' },
+    ],
+    // 阿里云 API 使用标准 OpenAI 兼容格式
+    buildArgs: (_prompt, _imagePaths, _extra, options = {}) => {
+      const args = [];
+      if (options.model && options.model !== 'default') {
+        args.push('--model', options.model);
+      }
+      return args;
+    },
+    streamFormat: 'json-event-stream',
+    eventParser: 'openai',
+  },
 ];
 
 export function resolveOnPath(bin) {

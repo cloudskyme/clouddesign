@@ -11,6 +11,7 @@
 8. [媒体生成](#媒体生成)
 9. [高级功能](#高级功能)
 10. [故障排除](#故障排除)
+11. [阿里云API集成](#阿里云API集成)
 
 ---
 
@@ -331,6 +332,50 @@ pnpm install
 # 重新启动
 pnpm tools-dev run web
 ```
+
+---
+
+## <a id="阿里云API集成"></a>11. 阿里云API集成
+
+Open Design 现已支持阿里云 DashScope API，可直接调用通义千问（Qwen）系列大模型，包括 Qwen-Max、Qwen-Plus、Qwen-Turbo、Qwen-VL-Plus 和 Qwen-Audio-Plus。
+
+### 11.1 配置步骤
+
+1. **打开设置**：点击右上角的「设置」按钮
+2. **选择执行模式**：在「执行模式与模型」选项卡中，选择「阿里云 API」
+3. **填写配置信息**：
+   - **API Key**：从阿里云 DashScope 控制台获取的 API Key
+   - **Base URL**：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+   - **模型**：选择合适的 Qwen 模型（Qwen-Max、Qwen-Plus、Qwen-Turbo 等）
+4. **保存配置**：点击「保存」按钮应用配置
+
+### 11.2 阿里云模型特性
+
+| 模型 | 特点 | 适用场景 |
+|------|------|----------|
+| `qwen-max` | 最强综合能力 | 复杂设计任务、多步骤推理 |
+| `qwen-plus` | 平衡性能与成本 | 日常设计工作流 |
+| `qwen-turbo` | 快速响应 | 快速原型、简单任务 |
+| `qwen-vl-plus` | 多模态理解 | 图像分析、图文生成 |
+| `qwen-audio-plus` | 音频处理 | 语音合成、音频分析 |
+
+### 11.3 使用技巧
+
+- **最佳实践**：对于复杂设计任务，推荐使用 `qwen-max`；对于快速迭代，推荐使用 `qwen-turbo`
+- **提示词优化**：阿里云模型对中文提示词理解优秀，建议使用自然语言描述设计需求
+- **性能调优**：可通过「最大 tokens」设置调整响应长度，平衡生成质量和速度
+- **错误处理**：如果遇到 API 错误，请检查 API Key 是否正确，以及账户余额是否充足
+
+### 11.4 故障排除
+
+#### Q：无法连接到阿里云 API
+A：请检查网络连接，确认 Base URL 正确（应为 `https://dashscope.aliyuncs.com/compatible-mode/v1`），并确保 API Key 有效
+
+#### Q：模型选择列表为空
+A：请确认已正确选择「阿里云 API」模式，并检查 API Key 是否填写正确
+
+#### Q：生成结果不符合预期
+A：尝试更换不同 Qwen 模型，或优化提示词描述，阿里云模型对中文指令理解更佳
 
 ---
 

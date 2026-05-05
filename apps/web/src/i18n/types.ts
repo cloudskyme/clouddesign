@@ -80,6 +80,8 @@ export interface Dict {
   'settings.modeDaemonInstalledMeta': string;
   'settings.modeApi': string;
   'settings.modeApiMeta': string;
+  'settings.modeAliyun': string;
+  'settings.modeAliyunMeta': string;
   'settings.codeAgent': string;
   'settings.codeAgentHint': string;
   'settings.rescan': string;

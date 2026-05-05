@@ -25,7 +25,7 @@ import type {
   UpdateDeployConfigRequest,
 } from '@open-design/contracts';
 
-export type ExecMode = 'daemon' | 'api';
+export type ExecMode = 'daemon' | 'api' | 'aliyun';
 
 export interface MediaProviderCredentials {
   apiKey: string;
